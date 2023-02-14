@@ -20,9 +20,9 @@ if __name__ == "__main__":
 img1=cv2.resize(img1,(1024,1024))
 img2=cv2.resize(img2,(1024,1024))
 
-def Estimate_Theta(r,phi,moment):
-    x=(r**2)*np.sin(moment*phi)
-    y=(r**2)*np.cos(moment*phi)
+def Estimate_Theta(r2,phi,moment):
+    x=(r2)*np.sin(moment*phi)
+    y=(r2)*np.cos(moment*phi)
     a=x.sum()
     b=y.sum()
     Theta= (1/moment)*np.arctan2(a,b)
@@ -33,7 +33,7 @@ def Estimate_Scaling(Theta,img1,img2):
     Sy = img1*np.cos(Theta- np.pi / .2)+img2*np.sin(Theta- np.pi / .2)
     s1 = (Sx**2).sum()
     s2 = (Sy**2).sum()
-    S = np.diag([1. / s1, 1. / s2]) 
+    S = np.diag(np.sqrt([1. / s1, 1. / s2])) 
     return S    
 
 def decompose(Y1, Y2):
