@@ -33,7 +33,7 @@ def Estimate_Scaling(Theta,img1,img2):
     Sy = img1*np.cos(Theta- np.pi / .2)+img2*np.sin(Theta- np.pi / .2)
     s1 = (Sx**2).sum()
     s2 = (Sy**2).sum()
-    S = np.diag(np.sqrt([1. / s1, 1. / s2])) 
+    S = np.diag(np.sqrt([1, s1 / s2])) # scaling by s1 
     return S    
 
 def decompose(Y1, Y2):
@@ -50,13 +50,13 @@ def decompose(Y1, Y2):
         Sinv =  Estimate_Scaling(theta1, Y1, Y2)                             
 
         theta2=Estimate_Theta(R,PHI,4)
-        R2inv = np.array([[np.cos(theta2), -np.sin(theta2)],[np.sin(theta2), np.cos(theta2)]]).transpose()                                
+        R2 = np.array([[np.cos(theta2), -np.sin(theta2)],[np.sin(theta2), np.cos(theta2)]])                                
 
-        Minv = np.matmul(R2inv, np.matmul(Sinv, R1inv))                  
+        Minv = np.matmul(R2, np.matmul(Sinv, R1inv))                  
 
-        return R1inv, Sinv, R2inv, Minv
+        return R1inv, Sinv, R2, Minv
 
-R1inv, Sinv, R2inv, Minv = decompose(img1, img2)
+R1inv, Sinv, R2, Minv = decompose(img1, img2)
 Im = np.concatenate([img1.reshape(1, -1),img2.reshape(1, -1)], axis=0)
 Im = np.matmul(Minv, Im)
 
